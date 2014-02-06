@@ -6,6 +6,7 @@ module RayT.Vector
     , vLen2, vLength
     , vNorm
     , (.*)
+    , (.*.)
     , (~=)
     ) where
 
@@ -43,6 +44,10 @@ a ~= b
 infix 7 .*
 (.*) :: Num a => a -> Vector3 a -> Vector3 a
 (!s) .* (Vec3 (!a, !b, !c)) = Vec3 (s*a, s*b, s*c)
+
+infix 6 .*.
+(.*.) :: Num a => Vector3 a -> Vector3 a -> a
+(Vec3 (a,b,c)) .*. (Vec3 (a',b',c')) = a*a' + b*b' + c*c'
 
 instance Num a => Num (Vector3 a) where
     (Vec3 (!a,!b,!c)) + (Vec3 (!a',!b',!c')) = Vec3 (a+a', b+b', c+c')

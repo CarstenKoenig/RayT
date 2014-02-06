@@ -58,7 +58,21 @@ vectorTests =
         ((\v -> v /= 0 ==> vLength v .* vNorm v == v)
           :: R3 -> Property)
     ]
-
+    , testGroup "scalar product"
+    [
+      testProperty
+        "scalarproduct is linear in the first component"
+        ((\a b v v' w -> (a.*v+b.*v') .*. w ~= a*(v.*.w) + b*(v'.*.w))
+          :: Double -> Double -> R3 -> R3 -> R3 -> Bool)
+      ,testProperty
+        "scalarproduct is symmetric"
+        ((\v w -> v.*.w ~= w.*.v)
+          :: R3 -> R3 -> Bool)
+      ,testProperty
+        "scalarproduct of a vector with itself is the square of it's length"
+        ((\v -> v.*.v ~= vLen2 v)
+          :: R3 -> Bool)
+    ]
   ]
 
 -- A recommended way of creating HUnit tests. Such tests are easy to integrate
