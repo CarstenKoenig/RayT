@@ -22,20 +22,43 @@ vectorTests =
         simpleAssert
      ,testProperty 
         "the 0-vector is the additive neutral element"
-        zeroIsNeutral
+        ((\v -> v + 0 == v && 0 + v == v)
+          :: R3 -> Bool)
      ,testProperty 
         "vector addition is commutative"
-        vectorAdditionIsCommutative
+        ((\v v' -> v + v' == v' + v)
+          :: R3 -> R3 -> Bool)
     ]
     ,testGroup "scalar multiplication"
     [
       testProperty
         "scalar multiplication is distributive in the scalars"
-        scalarMultIsDistributiveOnScalar
+        ((\s s' v -> (s+s').*v == s.*v + s'.*v)
+          :: Double -> Double -> R3 -> Bool)
       ,testProperty
         "scalar multiplication is distributive in the vector"
-        scalarMultIsDistributiveOnVector
+        ((\s v v' -> s .* (v+v') == s.*v + s.*v')
+          :: Double -> R3 -> R3 -> Bool)
     ]
+    ,testGroup "length and norm of vectors"
+    [
+      testProperty
+        "length of vectors along the axes are just the component"
+        ((\(Positive l) -> 
+                l ~= vLength (Vec3 (l,0,0)) &&
+                l ~= vLength (Vec3 (0,l,0)) &&
+                l ~= vLength (Vec3 (0,0,l)))
+          :: Positive Double -> Bool)
+      ,testProperty
+        "norm of a non-zero vector has length 1"
+        ((\v -> v /= 0 ==> vLength (vNorm v) ~= 1)
+          :: R3 -> Property)
+      ,testProperty
+        "for non-zero v: len(v) * norm(v) == v"
+        ((\v -> v /= 0 ==> vLength v .* vNorm v == v)
+          :: R3 -> Property)
+    ]
+
   ]
 
 -- A recommended way of creating HUnit tests. Such tests are easy to integrate
@@ -48,23 +71,6 @@ simpleCheck :: Int -> Bool
 simpleCheck i =
   i < 0 || i > 10000 ||
     (i + i == 2*i)
-
-zeroIsNeutral :: R3 -> Bool
-zeroIsNeutral v = 
-    v + 0 == v &&
-    0 + v == v
-
-vectorAdditionIsCommutative :: R3 -> R3 -> Bool
-vectorAdditionIsCommutative v v' = 
-    v + v' == v' + v
-
-scalarMultIsDistributiveOnScalar :: Double -> Double -> R3 -> Bool
-scalarMultIsDistributiveOnScalar s s' v =
-  (s+s').*v == s.*v + s'.*v
-
-scalarMultIsDistributiveOnVector :: Double -> R3 -> R3 -> Bool
-scalarMultIsDistributiveOnVector s v v' =
-  s .* (v+v') == s.*v + s.*v'
 
 -- * instances
 
