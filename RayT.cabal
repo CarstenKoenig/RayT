@@ -17,9 +17,13 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:    src
-  exposed-modules:   RayT
+  exposed-modules:   RayT,
+                     RayT.Image
   -- other-modules:     RayTracer.Types,
-  build-depends:     base
+  build-depends:     base >=4.6 && <4.7,
+                     transformers,
+                     repa,
+                     JuicyPixels
   default-language:  Haskell2010
   ghc-options:       -Wall
 

@@ -1,6 +1,5 @@
 module RayT (
-	Vector 
+	Vector,
 ) where
 
 import RayT.Vector
-
