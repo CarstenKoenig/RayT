@@ -17,7 +17,7 @@ vLength :: Floating a => Vector3 a -> a
 vLength = sqrt . vLen2
 
 vLen2 :: Floating a => Vector3 a -> a
-vLen2 (Vec3 (a,b,c)) = a*a + b*b + c*c
+vLen2 (Vec3 (!a,!b,!c)) = a*a + b*b + c*c
 
 vNorm :: Floating a => Vector3 a -> Vector3 a
 vNorm v = (1/vLength v) .* v
@@ -47,7 +47,7 @@ infix 7 .*
 
 infix 6 .*.
 (.*.) :: Num a => Vector3 a -> Vector3 a -> a
-(Vec3 (a,b,c)) .*. (Vec3 (a',b',c')) = a*a' + b*b' + c*c'
+(Vec3 (!a,!b,!c)) .*. (Vec3 (!a',!b',!c')) = a*a' + b*b' + c*c'
 
 instance Num a => Num (Vector3 a) where
     (Vec3 (!a,!b,!c)) + (Vec3 (!a',!b',!c')) = Vec3 (a+a', b+b', c+c')
