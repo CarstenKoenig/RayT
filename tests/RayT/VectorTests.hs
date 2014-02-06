@@ -13,6 +13,8 @@ import RayT.Vector
 
 vectorTests :: Test
 vectorTests =
+  testGroup "Vector tests"
+  [
     testGroup "Vector addition"
     [
      testCase 
@@ -25,6 +27,17 @@ vectorTests =
         "vector addition is commutative"
         vectorAdditionIsCommutative
     ]
+    ,testGroup "scalar multiplication"
+    [
+      testProperty
+        "scalar multiplication is distributive in the scalars"
+        scalarMultIsDistributiveOnScalar
+      ,testProperty
+        "scalar multiplication is distributive in the vector"
+        scalarMultIsDistributiveOnVector
+    ]
+  ]
+
 -- A recommended way of creating HUnit tests. Such tests are easy to integrate
 -- with test-framework (see MainTestSuite.hs)
 simpleAssert :: Assertion
@@ -44,6 +57,14 @@ zeroIsNeutral v =
 vectorAdditionIsCommutative :: R3 -> R3 -> Bool
 vectorAdditionIsCommutative v v' = 
     v + v' == v' + v
+
+scalarMultIsDistributiveOnScalar :: Double -> Double -> R3 -> Bool
+scalarMultIsDistributiveOnScalar s s' v =
+  (s+s').*v == s.*v + s'.*v
+
+scalarMultIsDistributiveOnVector :: Double -> R3 -> R3 -> Bool
+scalarMultIsDistributiveOnVector s v v' =
+  s .* (v+v') == s.*v + s.*v'
 
 -- * instances
 
