@@ -8,10 +8,20 @@ module RayT.Vector
     , (.*)
     , (.*.)
     , (~=)
+    , bX, bY, bZ
     ) where
 
 newtype Vector3 a = Vec3 (a, a, a)
 type    R3        = Vector3 Double
+
+bX :: Num a => Vector3 a
+bX = Vec3 (1,0,0)
+
+bY :: Num a => Vector3 a
+bY = Vec3 (0,1,0)
+
+bZ :: Num a => Vector3 a
+bZ = Vec3 (0,0,1)
 
 vLength :: Floating a => Vector3 a -> a
 vLength = sqrt . vLen2
