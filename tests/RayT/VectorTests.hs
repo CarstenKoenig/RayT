@@ -50,6 +50,19 @@ vectorTests =
                 l ~= vLength (Vec3 (0,0,l)))
           :: Positive Double -> Bool)
       ,testProperty
+        "length is zero IIF vector is zero"
+        ((\v -> vLength v ~= 0 && v == 0
+                || not (vLength v ~= 0) && v /= 0)
+          :: R3 -> Bool)
+      ,testProperty
+        "||lv|| = |l|||v||"
+        ((\l v -> vLength(l.*v) ~= abs l * vLength v)
+          :: Double -> R3 -> Bool)
+      ,testProperty
+        "||v+w|| <= ||v||+||w||"
+        ((\v w -> vLength(v+w) <= vLength v + vLength w)
+          :: R3 -> R3 -> Bool)
+      ,testProperty
         "norm of a non-zero vector has length 1"
         ((\v -> v /= 0 ==> vLength (vNorm v) ~= 1)
           :: R3 -> Property)
