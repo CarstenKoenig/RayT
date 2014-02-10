@@ -1,13 +1,35 @@
-module RayT (
-	R3
-) where
+module RayT 
+	( ImageCoords
+    , ImageSize
+    , Screen (..)
+    , Camera (..)
+    , Ray
+    , Intersection (..)
+    , Material (..)
+    , Color 
+    , Object
+    , Scene
+    , R3, Vector3 (..)
+    , rgb
+    , defaultScreen, defaultCamera
+    , ray, rayTo, rayStart, rayDirection
+    , traceRay
+	) where
+
+import GHC.Exts
+import Data.Maybe (catMaybes)
 
 import RayT.Vector
 import RayT.UnitDouble
-import RayT.Image
 
 type Width  = Double
 type Height = Double
+
+-- | Pixel-coordinate (X, Y)
+type    ImageCoords   = (Int, Int)
+
+-- | Image size in Pixels (width, height)
+type    ImageSize     = (Int, Int)
 
 data Screen = Screen
 	{ center :: R3
@@ -22,9 +44,10 @@ data Camera = Camera
 
 newtype Ray = Ray (R3, R3)
 
-data Intersection a = Inters
-	{ iPoint    :: Vector3 a
-	, iNormal   :: Vector3 a
+data Intersection = Intersection
+	{ iDistance :: Double
+	, iPoint    :: R3
+	, iNormal   :: R3
 	, iMaterial :: Material 
 	} deriving Show
 
@@ -33,6 +56,13 @@ data Material = Mat
 	} deriving Show
 
 type Color = Vector3 UnitDouble
+
+type Object = Ray -> Maybe Intersection
+type Scene  = [Object]
+
+-- | color given by red/green/blue componentes (each between 0 and 1)
+rgb :: Double -> Double -> Double -> Color
+rgb r g b = Vec3 (unitD r, unitD g, unitD b)
 
 -- | a default screen is located at the origin (0,0,0) with default axis
 defaultScreen :: (Width, Height) -> Screen
@@ -51,15 +81,18 @@ ray start dir = Ray (start, dir)
 rayTo :: R3 -> R3 -> Ray
 rayTo from to = ray from (to - from)
 
--- | determine a point on the screen by rastering the complete screen
-rasterPoint :: Screen -> ImageSize -> ImageCoords -> R3
-rasterPoint screen (iW, iH) (iX, iY) = start + x.*aX + y.*aY
-	where x = 0.5 + fromIntegral iX / fromIntegral iW
-	      y = 0.5 + fromIntegral iY / fromIntegral iH
-	      aX = axisX screen
-	      aY = axisY screen
-	      start = center screen - 0.5.*(aX + aY)
+rayStart :: Ray -> R3
+rayStart (Ray (s, _)) = s
 
--- | uses `rasterPoint` to get a start-ray from the camaras eye to a rasterized point on the screen
-rasterRay :: Camera -> ImageSize -> ImageCoords -> Ray
-rasterRay cam sz = rayTo (eyePos cam) . rasterPoint (screen cam) sz
+rayDirection :: Ray -> R3
+rayDirection (Ray (_, d)) = d
+
+-- | traces a single ray through a scene
+-- using the easiest possible strategy (brute force) right now
+traceRay :: Scene -> Ray -> Color
+traceRay scene r =
+	case intersections of
+		[]   -> black
+		ints -> matColor . iMaterial . head . sortWith iDistance $ ints
+	where intersections = catMaybes . map ((flip ($)) r) $ scene
+	      black         = Vec3 (0,0,0)
