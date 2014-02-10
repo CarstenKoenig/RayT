@@ -9,6 +9,7 @@ import Test.Framework.Providers.HUnit
 import RayT.VectorTests
 import RayT.UnitDoubleTests
 import RayT.UtilTests
+import RayT.PrimitivesTests
 
 main :: IO ()
 main = defaultMain tests
@@ -18,4 +19,5 @@ tests =
   [ vectorTests
   , unitDoubleTests
   , utilTests
+  , primitivesTests
   ]

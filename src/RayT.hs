@@ -95,4 +95,4 @@ traceRay scene r =
 		[]   -> black
 		ints -> matColor . iMaterial . head . sortWith iDistance $ ints
 	where intersections = catMaybes . map ((flip ($)) r) $ scene
-	      black         = Vec3 (0,0,0)
+	      black         = rgb 0 0 0

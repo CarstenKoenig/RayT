@@ -75,8 +75,8 @@ colorToComp (Vec3 (r, g, b)) =
 -- | determine a point on the screen by rastering the complete screen
 rasterPoint :: Screen -> ImageSize -> ImageCoords -> R3
 rasterPoint sc (iW, iH) (iX, iY) = start + x.*aX + y.*aY
-  where x = 0.5 + fromIntegral iX / fromIntegral iW
-        y = 0.5 + fromIntegral iY / fromIntegral iH
+  where x = (0.5 + fromIntegral iX) / fromIntegral iW
+        y = (0.5 + fromIntegral (iH - iY)) / fromIntegral iH
         aX = axisX sc
         aY = axisY sc
         start = center sc - 0.5.*(aX + aY)

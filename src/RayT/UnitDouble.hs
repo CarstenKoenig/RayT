@@ -20,9 +20,14 @@ valueD :: UnitDouble => Double
 valueD (UD a) = a
 
 instance Eq UnitDouble where
-    (UD a) == (UD b)
-        | abs b < tolerance = abs a < tolerance
-        | otherwise         = abs ((a-b)/b) < tolerance
+    (UD a) == (UD b) = a == b
+
+instance Ord UnitDouble where
+    compare (UD a) (UD b) = compare a b
+
+instance Fractional UnitDouble where
+    fromRational r = UD $ fromRational r
+    recip (UD a) = unitD $ recip a
 
 -- | defining some basic operations on the bounded Doubles
 -- REMARK: please note, that this is a bit of missuese as the defined
