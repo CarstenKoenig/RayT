@@ -22,6 +22,9 @@ utilTests =
         "can solve for given solutions"
         ((\a b c -> solves a b c $ solveQ a b c)
           :: Double -> Double -> Double -> Bool)
+      ,testCase
+        "solves simple equation"
+        ([2, 1] @=? solveQ 4 (-12) 8)
     ]
   ]
 

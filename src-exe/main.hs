@@ -5,7 +5,10 @@ import  RayT.Primitives
 import  RayT.Image (traceToPng)
 
 main :: IO()
-main = traceToPng sz cam testScene ".\\test.png"
+main = do
+	putStrLn "tracing image..."
+	traceToPng sz cam testScene "test.png"
+	putStrLn "...done!"
 	where sz  = (600, 600)
 	      cam = defaultCamera (-10) (4, 4)
 
