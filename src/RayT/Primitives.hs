@@ -18,8 +18,7 @@ sphere mat cent rad ry =
         a  = vLen2 d
         b  = 2 * (o .*. d)
         c  = vLen2 o - rad*rad
-        pointAt t  = s + t.*d
-        resultAt t = let pt = pointAt t
+        resultAt t = let pt = s + t.*d
                          n  = vNorm (pt - cent)
                      in Intersection t pt n mat
     in case solveQ a b c of
