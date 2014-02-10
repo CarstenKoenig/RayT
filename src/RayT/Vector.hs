@@ -7,9 +7,10 @@ module RayT.Vector
     , vNorm
     , (.*)
     , (.*.)
-    , (~=)
     , bX, bY, bZ
     ) where
+
+import RayT.Utils
 
 newtype Vector3 a = Vec3 (a, a, a)
 type    R3        = Vector3 Double
@@ -45,12 +46,6 @@ instance Show a => Show (Vector3 a) where
 
 -- * operators
 
-infix 5 ~=
-(~=) :: (Ord a, Fractional a) => a -> a-> Bool
-a ~= b
-    | abs b < tolerance = abs a < tolerance
-    | otherwise         = abs ((a-b)/b) < tolerance
-
 infix 7 .*
 (.*) :: Num a => a -> Vector3 a -> Vector3 a
 (!s) .* (Vec3 (!a, !b, !c)) = Vec3 (s*a, s*b, s*c)
@@ -67,8 +62,3 @@ instance Num a => Num (Vector3 a) where
     fromInteger !a            = Vec3 (fromInteger a, fromInteger a, fromInteger a)
     abs _                     = undefined
     signum _                  = undefined
-
-
--- * helpers
-tolerance :: Fractional a => a
-tolerance = 0.00001

@@ -4,21 +4,20 @@ module RayT.Primitives
     , sphere
     ) where
 
-import Control.Applicative ((<$>))
-
 import RayT
 import RayT.Vector
+import RayT.Utils
 
 type Radius = Double
 
 sphere :: Material -> R3 -> Radius -> Object
-sphere mat cent r ray =
-    let s  = rayStart ray
-        d  = rayDirection ray
+sphere mat cent rad ry =
+    let s  = rayStart ry
+        d  = rayDirection ry
         o  = s - cent
         a  = vLen2 d
         b  = 2 * (o .*. d)
-        c  = vLen2 o - r*r
+        c  = vLen2 o - rad*rad
         pointAt t  = s + t.*d
         resultAt t = let pt = pointAt t
                          n  = vNorm (pt - cent)
@@ -31,15 +30,4 @@ sphere mat cent r ray =
                     else if 0 <= t2
                     then Just $ resultAt t2
                     else Nothing
-    
-
-
-solveQ :: Double -> Double -> Double -> [Double]
-solveQ a b c
-    | a ~= 0 && b ~= 0 = []
-    | a ~= 0    = [negate c / b]
-    | det < 0   = []
-    | det ~= 0  = [negate b / a]
-    | otherwise = [(negate b + sdet)/a, (negate b - sdet)/a]
-    where det  = b*b - a*c
-          sdet = sqrt det
+        _        -> error "unexpected case"
