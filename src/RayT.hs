@@ -3,6 +3,7 @@ module RayT (
 ) where
 
 import RayT.Vector
+import RayT.UnitDouble
 import RayT.Image
 
 type Width  = Double
@@ -20,6 +21,18 @@ data Camera = Camera
 	} deriving Show
 
 newtype Ray = Ray (R3, R3)
+
+data Intersection a = Inters
+	{ iPoint    :: Vector3 a
+	, iNormal   :: Vector3 a
+	, iMaterial :: Material 
+	} deriving Show
+
+data Material = Mat
+	{ matColor :: Color 
+	} deriving Show
+
+type Color = Vector3 UnitDouble
 
 -- | a default screen is located at the origin (0,0,0) with default axis
 defaultScreen :: (Width, Height) -> Screen

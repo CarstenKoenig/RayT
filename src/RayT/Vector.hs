@@ -61,10 +61,10 @@ infix 6 .*.
 
 instance Num a => Num (Vector3 a) where
     (Vec3 (!a,!b,!c)) + (Vec3 (!a',!b',!c')) = Vec3 (a+a', b+b', c+c')
+    (Vec3 (!a,!b,!c)) * (Vec3 (!a',!b',!c')) = Vec3 (a*a', b*b', c*c')
     (Vec3 (!a,!b,!c)) - (Vec3 (!a',!b',!c')) = Vec3 (a-a', b-b', c-c')
     negate (Vec3 (!a,!b,!c))  = Vec3 (negate a, negate b, negate c)
     fromInteger !a            = Vec3 (fromInteger a, fromInteger a, fromInteger a)
-    _ * _                     = undefined
     abs _                     = undefined
     signum _                  = undefined
 
