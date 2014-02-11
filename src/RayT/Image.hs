@@ -3,7 +3,7 @@
 -- use 'renderToPng' to generate a generic PNG image
 module RayT.Image 
     ( ImageCoords, ImageSize, ColorRGB, PixelGen,
-      renderToPng, traceToPng
+      renderToPng, traceToPng, rasterPoint
     ) where
 
 import RayT
@@ -67,12 +67,12 @@ imageArray (w, h) gen = fromFunction (Z:.w:.h) calcPixel
 
 -- | determine a point on the screen by rastering the complete screen
 rasterPoint :: Screen -> ImageSize -> ImageCoords -> R3
-rasterPoint sc (iW, iH) (iX, iY) = start + x.*aX + y.*aY
+rasterPoint sc (iW, iH) (iX, iY) = start + x.*aX - y.*aY
   where x = (0.5 + fromIntegral iX) / fromIntegral iW
-        y = (0.5 + fromIntegral (iH - iY)) / fromIntegral iH
+        y = (0.5 + fromIntegral iY) / fromIntegral iH
         aX = axisX sc
         aY = axisY sc
-        start = center sc - 0.5.*(aX + aY)
+        start = center sc - 0.5.*(aX - aY)
 
 -- | uses `rasterPoint` to get a start-ray from the camaras eye to a rasterized point on the screen
 rasterRay :: Camera -> ImageSize -> ImageCoords -> Ray

@@ -10,6 +10,7 @@ import RayT.VectorTests
 import RayT.UtilTests
 import RayT.PrimitivesTests
 import RayT.ColorTests
+import RayT.ImageTests
 
 main :: IO ()
 main = defaultMain tests
@@ -20,4 +21,5 @@ tests =
   , utilTests
   , primitivesTests
   , colorTests
+  , imageTests
   ]

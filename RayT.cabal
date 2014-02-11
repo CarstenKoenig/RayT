@@ -48,6 +48,8 @@ test-suite RayT-tests
   hs-source-dirs:    tests, src
   main-is:           MainTestSuite.hs
   build-depends:     base,
+                     transformers,
+                     repa,
                      JuicyPixels,
                      HUnit,
                      QuickCheck,
