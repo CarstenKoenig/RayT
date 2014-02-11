@@ -20,7 +20,7 @@ import GHC.Exts
 import Data.Maybe (catMaybes)
 
 import RayT.Vector
-import RayT.UnitDouble
+import RayT.Colors
 
 type Width  = Double
 type Height = Double
@@ -55,14 +55,8 @@ data Material = Mat
 	{ matColor :: Color 
 	} deriving Show
 
-type Color = Vector3 UnitDouble
-
 type Object = Ray -> Maybe Intersection
 type Scene  = [Object]
-
--- | color given by red/green/blue componentes (each between 0 and 1)
-rgb :: Double -> Double -> Double -> Color
-rgb r g b = Vec3 (unitD r, unitD g, unitD b)
 
 -- | a default screen is located at the origin (0,0,0) with default axis
 defaultScreen :: (Width, Height) -> Screen
@@ -95,4 +89,3 @@ traceRay scene r =
 		[]   -> black
 		ints -> matColor . iMaterial . head . sortWith iDistance $ ints
 	where intersections = catMaybes . map ((flip ($)) r) $ scene
-	      black         = rgb 0 0 0

@@ -8,9 +8,9 @@ module RayT.Image
 
 import RayT
 import RayT.Vector
-import RayT.UnitDouble
+import RayT.Colors
 
-import Codec.Picture (PixelRGB8(..), Image, generateImage, writePng, Pixel8)
+import Codec.Picture (PixelRGB8(..), Image, generateImage, writePng)
 import Data.Array.Repa as Repa hiding ((++))
 import Data.Functor.Identity
 
@@ -19,8 +19,6 @@ import Data.Functor.Identity
 
 -- | use to generate the image
 type PixelGen = ImageCoords -> Color
-
-type ColorRGB = (Pixel8, Pixel8, Pixel8)
 
 -- * methods
 
@@ -65,12 +63,7 @@ renderImageParallel sz@(w,h) gen = runIdentity go
 
 imageArray :: ImageSize -> PixelGen -> Array D DIM2 ColorRGB
 imageArray (w, h) gen = fromFunction (Z:.w:.h) calcPixel
-    where calcPixel (Z:.x':.y') = colorToComp $ gen (x',y')
-
-colorToComp :: Color -> ColorRGB
-colorToComp (Vec3 (r, g, b)) = 
-    (scale r, scale g, scale b)
-      where scale v =  floor $ 255 * valueD v
+    where calcPixel (Z:.x':.y') = toColorRGB $ gen (x',y')
 
 -- | determine a point on the screen by rastering the complete screen
 rasterPoint :: Screen -> ImageSize -> ImageCoords -> R3

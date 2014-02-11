@@ -18,10 +18,11 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:    src
   exposed-modules:   RayT,
+                     RayT.Colors,
+                     RayT.Vector,
                      RayT.Image,
                      RayT.Primitives
-  other-modules:     RayT.UnitDouble,
-                     RayT.Vector
+  -- other-modules:     
   build-depends:     base >=4.6 && <4.7,
                      transformers,
                      repa,
@@ -47,6 +48,7 @@ test-suite RayT-tests
   hs-source-dirs:    tests, src
   main-is:           MainTestSuite.hs
   build-depends:     base,
+                     JuicyPixels,
                      HUnit,
                      QuickCheck,
                      test-framework,

@@ -14,8 +14,8 @@ import Test.Framework.Providers.HUnit
 import RayT
 import RayT.Primitives
 import RayT.Vector
-import RayT.UnitDouble
 import RayT.Utils
+import RayT.Colors
 
 primitivesTests :: Test
 primitivesTests =
@@ -35,23 +35,8 @@ primitivesTests =
      ,testCase 
         "trace-ray above the sphere will not hit"
         (True @=? black == traceRay [defaultSphere] (ray 0 (10.*bZ + 1.1.*bY)))
-      ,testCase
-        "black is not white"
-        (False @=? black == white)
-      ,testCase
-        "0 is not 1"
-        (False @=? (unitD 0) == (unitD 1))
-      ,testCase
-        "0 is not 'near' 1"
-        (False @=? (unitD 0) ~= (unitD 1))
     ]
   ]
-
-black :: Color
-black = rgb 0 0 0
-
-white :: Color
-white = rgb 1 1 1
 
 defaultSphere :: Object
 defaultSphere = sphere (Mat white) (10.*bZ) 1

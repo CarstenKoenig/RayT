@@ -7,9 +7,9 @@ import Test.Framework.Providers.QuickCheck2
 import Test.Framework.Providers.HUnit
 
 import RayT.VectorTests
-import RayT.UnitDoubleTests
 import RayT.UtilTests
 import RayT.PrimitivesTests
+import RayT.ColorTests
 
 main :: IO ()
 main = defaultMain tests
@@ -17,7 +17,7 @@ main = defaultMain tests
 tests :: [Test]
 tests =
   [ vectorTests
-  , unitDoubleTests
   , utilTests
   , primitivesTests
+  , colorTests
   ]
