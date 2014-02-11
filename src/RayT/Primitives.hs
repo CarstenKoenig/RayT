@@ -18,7 +18,7 @@ sphere mat cent rad ry =
         b          = 2 * (o .*. d)
         c          = vLen2 o - rad*rad
         resultAt t = let pt = s + t.*d
-                         n  = vNorm (pt - cent)
+                         n  = normal (pt - cent)
                      in Intersection t pt n mat
     in case solveQ 1 b c of
         []       -> Nothing

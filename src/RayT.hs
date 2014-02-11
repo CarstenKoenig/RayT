@@ -48,7 +48,7 @@ newtype Ray = Ray (R3, N3)
 data Intersection = Intersection
 	{ iDistance :: Double
 	, iPoint    :: R3
-	, iNormal   :: R3
+	, iNormal   :: N3
 	, iMaterial :: Material 
 	} deriving Show
 
