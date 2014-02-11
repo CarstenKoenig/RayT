@@ -25,18 +25,22 @@ primitivesTests =
     [
      testCase 
         "ray straight along the Z-axis hits a default sphere"
-        (True @=? doesIntersect (ray 0 bZ) defaultSphere)
+        (True @=? doesIntersect (target 0) defaultSphere)
      ,testCase 
         "ray above the sphere will not hit"
-        (False @=? doesIntersect (ray 0 (10.*bZ + 1.1.*bY)) defaultSphere)
+        (False @=? doesIntersect (target (10.*bZ + 1.1.*bY)) defaultSphere)
      ,testCase 
         "trace-ray straight along the Z-axis hits a default sphere"
-        (True @=? white == traceRay [defaultSphere] (ray 0 bZ))
+        (True @=? white == traceRay [defaultSphere] (target 0))
      ,testCase 
         "trace-ray above the sphere will not hit"
-        (True @=? black == traceRay [defaultSphere] (ray 0 (10.*bZ + 1.1.*bY)))
+        (True @=? black == traceRay [defaultSphere] (target (10.*bZ + 1.1.*bY)))
     ]
   ]
+
+target :: R3 -> Ray
+target = rayTo cam
+  where cam = (-10).*bZ
 
 defaultSphere :: Object
 defaultSphere = sphere (Mat white) (10.*bZ) 1
