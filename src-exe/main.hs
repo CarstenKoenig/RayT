@@ -10,7 +10,7 @@ main = do
 	traceToPng sz cam testScene "test.png"
 	putStrLn "...done!"
 	where sz  = (600, 600)
-	      cam = defaultCamera (-10) (1, 1)
+	      cam = defaultCamera (-10) (2, 2)
 
 testScene :: Scene
 testScene = [ sphere redM c r ]

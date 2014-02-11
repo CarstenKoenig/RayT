@@ -28,5 +28,12 @@ imageTests =
       ,testCase
         "bottom-right pixel in a 3x3 image is projected to (2,-2,0) using a (6x6) default-screen"
         (Vec3 (2,-2,0) @=? rasterPoint (defaultScreen (6,6)) (3,3) (2,2))
+      ,testCase
+        "center pixel in a 3x3 image yields a ray along the Z-axis"
+        (target 0 @=? rasterRay (defaultCamera (-10) (6,6)) (3,3) (1,1))
     ]
   ]
+
+target :: R3 -> Ray
+target = rayTo cam
+  where cam = (-10).*bZ

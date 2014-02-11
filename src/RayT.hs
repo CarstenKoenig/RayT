@@ -43,6 +43,7 @@ data Camera = Camera
 	} deriving Show
 
 newtype Ray = Ray (R3, R3)
+	deriving (Eq, Show)
 
 data Intersection = Intersection
 	{ iDistance :: Double
@@ -66,7 +67,7 @@ defaultScreen (w, h) = Screen 0 (w.*bX) (h.*bY)
 -- at the given distance along the negative Z-axis 
 -- (so the camera will look along the positive Z-axis)
 defaultCamera :: Double -> (Width, Height) -> Camera
-defaultCamera dist2Cent = Camera (negate dist2Cent .* bZ) . defaultScreen
+defaultCamera dist2Cent = Camera ((negate . abs $ dist2Cent) .* bZ) . defaultScreen
 
 ray :: R3 -> R3 -> Ray
 ray start dir = Ray (start, dir)

@@ -3,7 +3,7 @@
 -- use 'renderToPng' to generate a generic PNG image
 module RayT.Image 
     ( ImageCoords, ImageSize, ColorRGB, PixelGen,
-      renderToPng, traceToPng, rasterPoint
+      renderToPng, traceToPng, rasterPoint, rasterRay
     ) where
 
 import RayT
