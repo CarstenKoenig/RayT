@@ -12,7 +12,7 @@ module RayT
     , R3, Vector3 (..)
     , rgb
     , defaultScreen, defaultCamera
-    , ray, rayTo, rayStart, rayDirection
+    , ray, rayN, rayTo, rayStart, rayDirection
     , traceRay
 	) where
 
@@ -42,7 +42,7 @@ data Camera = Camera
 	, screen :: Screen
 	} deriving Show
 
-newtype Ray = Ray (R3, R3)
+newtype Ray = Ray (R3, N3)
 	deriving (Eq, Show)
 
 data Intersection = Intersection
@@ -69,8 +69,11 @@ defaultScreen (w, h) = Screen 0 (w.*bX) (h.*bY)
 defaultCamera :: Double -> (Width, Height) -> Camera
 defaultCamera dist2Cent = Camera ((negate . abs $ dist2Cent) .* bZ) . defaultScreen
 
+rayN :: R3 -> N3 -> Ray
+rayN start dir = Ray (start, dir)
+
 ray :: R3 -> R3 -> Ray
-ray start dir = Ray (start, dir)
+ray start = rayN start . normal
 
 -- | ray from from the first point in the direction to the second
 rayTo :: R3 -> R3 -> Ray
@@ -79,7 +82,7 @@ rayTo from to = ray from (to - from)
 rayStart :: Ray -> R3
 rayStart (Ray (s, _)) = s
 
-rayDirection :: Ray -> R3
+rayDirection :: Ray -> N3
 rayDirection (Ray (_, d)) = d
 
 -- | traces a single ray through a scene

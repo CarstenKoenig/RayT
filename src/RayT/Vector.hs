@@ -2,9 +2,10 @@
 
 module RayT.Vector
     ( Vector3 (Vec3)
-    , R3
+    , Normal3 (Norm3)
+    , R3, N3
     , vLen2, vLength
-    , vNorm
+    , vNorm, normal
     , (.*)
     , (.*.)
     , bX, bY, bZ
@@ -14,6 +15,9 @@ import RayT.Utils
 
 newtype Vector3 a = Vec3 (a, a, a)
 type    R3        = Vector3 Double
+
+newtype Normal3 a = Norm3 (Vector3 a)   
+type    N3        = Normal3 Double
 
 bX :: Num a => Vector3 a
 bX = Vec3 (1,0,0)
@@ -33,6 +37,9 @@ vLen2 (Vec3 (!a,!b,!c)) = a*a + b*b + c*c
 vNorm :: Floating a => Vector3 a -> Vector3 a
 vNorm v = (1/vLength v) .* v
 
+normal :: Floating a => Vector3 a -> Normal3 a
+normal v = Norm3 (vNorm v)
+
 -- * basic instances
 
 instance (Ord a, Fractional a) => Eq (Vector3 a) where
@@ -43,6 +50,12 @@ instance (Ord a, Fractional a) => Eq (Vector3 a) where
 
 instance Show a => Show (Vector3 a) where
     show (Vec3 (a,b,c)) = "(" ++ show a ++ ", " ++ show b ++ ", " ++ show c ++ ")"
+
+instance Show a => Show (Normal3 a) where
+    show (Norm3 v) = show v
+
+instance (Ord a, Fractional a) => Eq (Normal3 a) where
+    Norm3 v == Norm3 v' = v == v'
 
 -- * operators
 
