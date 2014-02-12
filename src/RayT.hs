@@ -1,5 +1,5 @@
 module RayT 
-	( ImageCoords
+    ( ImageCoords
     , ImageSize
     , Screen (..)
     , Camera (..)
@@ -8,19 +8,20 @@ module RayT
     , Material (..)
     , Color 
     , Object
-    , Scene
+    , Scene (Scene)
     , R3, Vector3 (..)
     , rgb
     , defaultScreen, defaultCamera
     , ray, rayN, rayTo, rayStart, rayDirection
     , traceRay
-	) where
+    ) where
 
 import GHC.Exts
 import Data.Maybe (catMaybes)
 
 import RayT.Vector
 import RayT.Colors
+import RayT.Lights
 
 type Width  = Double
 type Height = Double
@@ -32,32 +33,35 @@ type    ImageCoords   = (Int, Int)
 type    ImageSize     = (Int, Int)
 
 data Screen = Screen
-	{ center :: R3
+    { center :: R3
     , axisX  :: R3
     , axisY  :: R3
-	} deriving Show
+    } deriving Show
 
 data Camera = Camera 
-	{ eyePos :: R3
-	, screen :: Screen
-	} deriving Show
+    { eyePos :: R3
+    , screen :: Screen
+    } deriving Show
 
 newtype Ray = Ray (R3, N3)
-	deriving (Eq, Show)
+    deriving (Eq, Show)
 
 data Intersection = Intersection
-	{ iDistance :: Double
-	, iPoint    :: R3
-	, iNormal   :: N3
-	, iMaterial :: Material 
-	} deriving Show
+    { iDistance :: Double
+    , iPoint    :: R3
+    , iNormal   :: N3
+    , iMaterial :: Material 
+    } deriving Show
 
 data Material = Mat
-	{ matColor :: Color 
-	} deriving Show
+    { matColor :: Color 
+    } deriving Show
 
 type Object = Ray -> Maybe Intersection
-type Scene  = [Object]
+data Scene  = Scene
+    { objects :: [Object]
+    , lights  :: [Light]
+    }
 
 -- | a default screen is located at the origin (0,0,0) with default axis
 defaultScreen :: (Width, Height) -> Screen
@@ -88,8 +92,15 @@ rayDirection (Ray (_, d)) = d
 -- | traces a single ray through a scene
 -- using the easiest possible strategy (brute force) right now
 traceRay :: Scene -> Ray -> Color
-traceRay scene r =
-	case intersections of
-		[]   -> black
-		ints -> matColor . iMaterial . head . sortWith iDistance $ ints
-	where intersections = catMaybes . map ((flip ($)) r) $ scene
+traceRay scene = maybe black (calcShading scene) . findIntersection scene
+
+-- | basic shading algorithm for an intersections
+calcShading :: Scene -> Intersection -> Color
+calcShading _ i = matColor . iMaterial $ i
+
+findIntersection :: Scene -> Ray -> Maybe Intersection
+findIntersection s r =
+    case intersections of
+        []   -> Nothing
+        ints -> Just . head . sortWith iDistance $ ints
+    where intersections = catMaybes . map ((flip ($)) r) . objects $ s

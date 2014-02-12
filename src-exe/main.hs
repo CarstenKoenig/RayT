@@ -16,11 +16,13 @@ main = do
 	      screen = Screen (3.*bY) (2.*bX) (2.*bY)
 
 testScene :: Scene
-testScene = [ sphere (colM red)   (c + 0.75.*bY) r
+testScene = Scene
+			[ sphere (colM red)   (c + 0.75.*bY) r
             , sphere (colM green) (c + 0.75.*bZ + 0.75.*bX - 0.75.*bY) r
             , sphere (colM blue)  (c + 0.75.*bZ - 0.75.*bX - 0.75.*bY) r
             , sphere (colM white) (c - 0.75.*bZ - 0.75.*bY) r
             ]
+            []
 	where c        = Vec3 (0,0,10)
 	      r        = 0.5
 	      colM col = Mat col
