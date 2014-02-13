@@ -32,19 +32,24 @@ primitivesTests =
         (False @=? doesIntersect (target (10.*bZ + 1.1.*bY)) sampleSphere)
      ,testCase 
         "trace-ray straight along the Z-axis hits a default sphere"
-        (True @=? black /= traceRay sampleScene (target 0))
+        (True @=? black /= trace (target 0))
      ,testCase 
         "trace-ray above the sphere will not hit"
-        (True @=? black == traceRay sampleScene (target (10.*bZ + 1.1.*bY)))
+        (True @=? black == trace (target (10.*bZ + 1.1.*bY)))
     ]
   ]
 
+trace :: Ray -> Color
+trace = traceRay camPos sampleScene
+
 target :: R3 -> Ray
-target = rayTo cam
-  where cam = (-10).*bZ
+target = rayTo camPos
+
+camPos :: R3
+camPos = (-10).*bZ
 
 sampleScene :: Scene
-sampleScene = Scene [sampleSphere] [Ambient white]
+sampleScene = Scene [sampleSphere] [AmbientLight white]
 
 sampleSphere :: Object
 sampleSphere = sphere (Mat white) (10.*bZ) 1

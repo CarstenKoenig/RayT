@@ -4,6 +4,8 @@ module RayT.Lights
     ) where
 
 import RayT.Colors
+import RayT.Vector(N3)
 
 data Light
-    = Ambient Color
+    = AmbientLight     Color
+    | DirectionalLight N3 Color

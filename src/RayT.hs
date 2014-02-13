@@ -92,17 +92,19 @@ rayDirection (Ray (_, d)) = d
 
 -- | traces a single ray through a scene
 -- using the easiest possible strategy (brute force) right now
-traceRay :: Scene -> Ray -> Color
-traceRay scene = maybe black (calcShading scene) . findIntersection scene
+traceRay :: R3 -> Scene -> Ray -> Color
+traceRay eP scene = maybe black (calcShading eP scene) . findIntersection scene
 
 -- | basic shading algorithm for an intersections
-calcShading :: Scene -> Intersection -> Color
-calcShading s i = lightF * mc
+calcShading :: R3 -> Scene -> Intersection -> Color
+calcShading eP s i = lightF * mc
 	where mc     = matColor . iMaterial $ i
-	      lightF = sum . map (calcLight s i) $ lights s
+	      lightF = sum . map (calcLight eP s i) $ lights s
 
-calcLight :: Scene -> Intersection -> Light -> Color
-calcLight _ _ (Ambient a) = a
+calcLight :: R3 -> Scene -> Intersection -> Light -> Color
+calcLight _ _ _ (AmbientLight a)                  = a
+calcLight _ _ i (DirectionalLight (Norm3 d) l) = scale (negate (d.*.n)) l
+	where Norm3 n = iNormal i
 
 findIntersection :: Scene -> Ray -> Maybe Intersection
 findIntersection s r =

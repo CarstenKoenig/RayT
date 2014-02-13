@@ -48,7 +48,7 @@ saveImage path img = writePng path img
 
 traceImage :: ImageSize -> Camera -> Scene -> Image PixelRGB8
 traceImage sz cam sc = renderImageParallel sz gen
-  where gen = traceRay sc . rasterRay cam sz
+  where gen = traceRay (eyePos cam) sc . rasterRay cam sz
 
 -- | renders the image in parallel
 renderImageParallel :: ImageSize -> PixelGen -> Image PixelRGB8
