@@ -2,6 +2,7 @@ module Main where
 
 import RayT
 import RayT.Colors
+import RayT.Lights
 import RayT.Primitives
 import RayT.Vector
 import RayT.Image (traceToPng)
@@ -22,7 +23,7 @@ testScene = Scene
             , sphere (colM blue)  (c + 0.75.*bZ - 0.75.*bX - 0.75.*bY) r
             , sphere (colM white) (c - 0.75.*bZ - 0.75.*bY) r
             ]
-            []
+            [Ambient (scale 0.3 white)]
 	where c        = Vec3 (0,0,10)
 	      r        = 0.5
 	      colM col = Mat col

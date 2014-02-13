@@ -19,6 +19,7 @@ module RayT
 import GHC.Exts
 import Data.Maybe (catMaybes)
 
+import RayT.Utils
 import RayT.Vector
 import RayT.Colors
 import RayT.Lights
@@ -96,11 +97,16 @@ traceRay scene = maybe black (calcShading scene) . findIntersection scene
 
 -- | basic shading algorithm for an intersections
 calcShading :: Scene -> Intersection -> Color
-calcShading _ i = matColor . iMaterial $ i
+calcShading s i = lightF * mc
+	where mc     = matColor . iMaterial $ i
+	      lightF = sum . map (calcLight s i) $ lights s
+
+calcLight :: Scene -> Intersection -> Light -> Color
+calcLight _ _ (Ambient a) = a
 
 findIntersection :: Scene -> Ray -> Maybe Intersection
 findIntersection s r =
     case intersections of
         []   -> Nothing
-        ints -> Just . head . sortWith iDistance $ ints
+        ints -> Just . head . sortWith iDistance . filter ((>~ 0) . iDistance) $ ints
     where intersections = catMaybes . map ((flip ($)) r) . objects $ s

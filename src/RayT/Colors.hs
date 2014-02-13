@@ -3,6 +3,7 @@ module RayT.Colors
     ( Color, ColorRGB
     , rgb
     , toColorRGB
+    , scale
     , black, white, red, green, blue
     ) where
 
@@ -36,6 +37,8 @@ blue = rgb 0 0 1
 rgb :: Double -> Double -> Double -> Color
 rgb r g b = RGB (bound r, bound g, bound b)
 
+scale :: Double -> Color -> Color
+scale d (RGB (r,g,b)) = rgb (d*r) (d*g) (d*b)
 
 bound :: Double => Double
 bound a

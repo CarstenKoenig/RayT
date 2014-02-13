@@ -1,5 +1,5 @@
 module RayT.Utils
-    ( (~=)
+    ( (~=), (>~)
     , solveQ
     ) where
 
@@ -21,5 +21,9 @@ a ~= b
     | abs b < tolerance = abs a < tolerance
     | otherwise         = abs ((a-b)/b) < tolerance
 
+infix 6 >~
+(>~) :: (Ord a, Fractional a) => a -> a -> Bool
+a >~ b = a > b && not (a ~= b)
+
 tolerance :: Fractional a => a
-tolerance = 0.00001    
+tolerance = 0.000001    

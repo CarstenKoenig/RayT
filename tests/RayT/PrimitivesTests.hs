@@ -16,6 +16,7 @@ import RayT.Primitives
 import RayT.Vector
 import RayT.Utils
 import RayT.Colors
+import RayT.Lights
 
 primitivesTests :: Test
 primitivesTests =
@@ -31,7 +32,7 @@ primitivesTests =
         (False @=? doesIntersect (target (10.*bZ + 1.1.*bY)) sampleSphere)
      ,testCase 
         "trace-ray straight along the Z-axis hits a default sphere"
-        (True @=? white == traceRay sampleScene (target 0))
+        (True @=? black /= traceRay sampleScene (target 0))
      ,testCase 
         "trace-ray above the sphere will not hit"
         (True @=? black == traceRay sampleScene (target (10.*bZ + 1.1.*bY)))
@@ -43,7 +44,7 @@ target = rayTo cam
   where cam = (-10).*bZ
 
 sampleScene :: Scene
-sampleScene = Scene [sampleSphere] []
+sampleScene = Scene [sampleSphere] [Ambient white]
 
 sampleSphere :: Object
 sampleSphere = sphere (Mat white) (10.*bZ) 1
