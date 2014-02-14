@@ -11,3 +11,4 @@ log
 cabal.sandbox.config
 *.sublime-workspace
 *.png
+SourceGraph/
