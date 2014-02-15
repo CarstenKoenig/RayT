@@ -17,7 +17,7 @@ module RayT
     ) where
 
 import GHC.Exts
-import Data.Maybe (catMaybes, isJust)
+import Data.Maybe (catMaybes, isNothing)
 
 import RayT.Utils
 import RayT.Vector
@@ -105,15 +105,18 @@ calcLight :: R3 -> Scene -> Intersection -> Light -> Color
 calcLight _ _ _ (AmbientLight a)               = a
 calcLight _ _ i (DirectionalLight (Norm3 d) l) = scale (negate (d.*.n)) l
 	where Norm3 n = iNormal i
-calcLight _ s i (PositionalLight lp lc)        = if inSight s lp (iPoint i) 
+calcLight _ s i (PositionalLight lp lc)        = if inSight s (iPoint i) lp
                                                  then lc else black
 
 inSight :: Scene -> R3 -> R3 -> Bool
-inSight scene from to = isJust . findIntersection scene $ rayTo from to
+inSight scene from to = isNothing . findIntersection scene $ rayTo from to
 
 findIntersection :: Scene -> Ray -> Maybe Intersection
 findIntersection s r =
     case intersections of
         []   -> Nothing
-        ints -> Just . head . sortWith iDistance . filter ((>~ 0) . iDistance) $ ints
-    where intersections = catMaybes . map ((flip ($)) r) . objects $ s
+        ints -> Just . nearest $ ints
+    where intersections    = thoseIntersected . objects $ s
+          thoseIntersected = catMaybes . map ((flip ($)) r)
+          nearest          = head . sortWith iDistance
+

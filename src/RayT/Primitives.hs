@@ -22,10 +22,12 @@ sphere mat cent rad ry =
                      in Intersection t pt n mat
     in case solveQ 1 b c of
         []       -> Nothing
-        [t]      -> Just $ resultAt t
-        [t1, t2] -> if 0 <= t1 && t1 <= t2 
+        [t]      -> if t >~ 0
+                    then Just $ resultAt t 
+                    else Nothing
+        [t1, t2] -> if t1 >~ 0 && t2 >~ t1
                     then Just $ resultAt t1
-                    else if 0 <= t2
+                    else if t2 >~ 0
                     then Just $ resultAt t2
                     else Nothing
         _        -> error "unexpected case"
