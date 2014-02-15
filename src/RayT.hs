@@ -17,6 +17,7 @@ module RayT
     ) where
 
 import GHC.Exts
+import Control.Applicative ((<$>))
 import Data.Maybe (catMaybes, isNothing)
 
 import RayT.Utils
@@ -105,11 +106,12 @@ calcLight :: R3 -> Scene -> Intersection -> Light -> Color
 calcLight _ _ _ (AmbientLight a)               = a
 calcLight _ _ i (DirectionalLight (Norm3 d) l) = scale (negate (d.*.n)) l
 	where Norm3 n = iNormal i
-calcLight _ s i (PositionalLight lp lc)        = if inSight s (iPoint i) lp
+calcLight _ s i (PositionalLight lp lc)        = if inSight s lp (iPoint i)
                                                  then lc else black
 
 inSight :: Scene -> R3 -> R3 -> Bool
-inSight scene from to = isNothing . findIntersection scene $ rayTo from to
+inSight scene from to = isNothing hit || hit == Just to
+    where hit = iPoint <$> (findIntersection scene $ rayTo from to)
 
 findIntersection :: Scene -> Ray -> Maybe Intersection
 findIntersection s r =
