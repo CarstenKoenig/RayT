@@ -19,3 +19,5 @@ Added basic shading with ambient and directed light
 
 ### Step 2.2
 Added positional lights that cast shadows
+
+![version3](./progressImages/version3.png)
