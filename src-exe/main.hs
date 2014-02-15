@@ -23,8 +23,8 @@ testScene = Scene
             , sphere (colM blue)  (c + 0.75.*bZ - 0.75.*bX - 0.75.*bY) r
             , sphere (colM white) (c - 0.75.*bZ - 0.75.*bY) r
             ]
-            [AmbientLight     (scale 0.2 white)
-            ,DirectionalLight (normal . Vec3 $ (0, -1, 0.2)) (scale 0.6 white)
+            [AmbientLight     (scale 0.1 white)
+            ,DirectionalLight (normal . Vec3 $ (0, -1, 0.2)) (scale 0.7 white)
             ,PositionalLight  (Vec3 (0.5, 5, 8))             (scale 0.2 white)
             ]
 	where c        = Vec3 (0,0,10)
