@@ -6,8 +6,7 @@ module RayT.Vector
     , R3, N3
     , vLen2, vLength
     , vNorm, normal
-    , (.*)
-    , (.*.)
+    , (.**.), (.*) , (.*.)
     , bX, bY, bZ
     ) where
 
@@ -58,6 +57,12 @@ instance (Ord a, Fractional a) => Eq (Normal3 a) where
     Norm3 v == Norm3 v' = v == v'
 
 -- * operators
+
+-- | cross product of two Vectors
+infix 7 .**.
+(.**.) :: Num a => Vector3 a -> Vector3 a -> Vector3 a
+(Vec3 (!a, !b, !c)) .**. (Vec3 (!a', !b', !c')) = Vec3 (b*c' - c*b', c*a' - a*c', a*b' - b*a')
+
 
 infix 7 .*
 (.*) :: Num a => a -> Vector3 a -> Vector3 a

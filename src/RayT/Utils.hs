@@ -26,4 +26,4 @@ infix 6 >~
 a >~ b = a+tolerance > b-tolerance && not (a ~= b)
 
 tolerance :: Fractional a => a
-tolerance = 0.0000001    
+tolerance = 0.000001    

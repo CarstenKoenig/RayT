@@ -71,6 +71,16 @@ vectorTests =
         "for non-zero v: len(v) * norm(v) == v"
         ((\v -> v /= 0 ==> vLength v .* vNorm v == v)
           :: R3 -> Property)
+      ,testCase
+        "cross product of bX and bY is bZ"
+        (bZ @=? bX .**. bY)
+      ,testCase
+        "cross product of bY and bZ is bX"
+        (bX @=? bY .**. bZ)
+      ,testCase
+        "cross product of bZ and bX is bY"
+        (bY @=? bZ .**. bX)
+
     ]
     , testGroup "scalar product"
     [
@@ -87,6 +97,18 @@ vectorTests =
         ((\v -> v.*.v ~= vLen2 v)
           :: R3 -> Bool)
     ]
+    , testGroup "cross product"
+    [
+      testProperty
+        "cross-product of two vectors is perpendicular to the first of them"
+        ((\v v' -> (v .**. v') .*. v ~= 0)
+          :: R3 -> R3 -> Bool)
+      ,testProperty
+        "cross-product of two vectors is perpendicular to the second of them"
+        ((\v v' -> (v .**. v') .*. v' ~= 0)
+          :: R3 -> R3 -> Bool)
+    ]
+
   ]
 
 -- A recommended way of creating HUnit tests. Such tests are easy to integrate

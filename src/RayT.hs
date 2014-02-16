@@ -20,7 +20,6 @@ import GHC.Exts
 import Control.Applicative ((<$>))
 import Data.Maybe (catMaybes, isNothing)
 
-import RayT.Utils
 import RayT.Vector
 import RayT.Colors
 import RayT.Lights
