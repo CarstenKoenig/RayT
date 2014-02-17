@@ -11,6 +11,7 @@ import RayT.Vector
 import RayT.Colors
 
 import Codec.Picture (PixelRGB8(..), Image, generateImage, writePng)
+import Control.Lens ((^.))
 import Data.Array.Repa as Repa hiding ((++))
 import Data.Functor.Identity
 
@@ -48,7 +49,7 @@ saveImage path img = writePng path img
 
 traceImage :: ImageSize -> Camera -> Scene -> Image PixelRGB8
 traceImage sz cam sc = renderImageParallel sz gen
-  where gen = traceRay (eyePos cam) sc . rasterRay cam sz
+  where gen = traceRay (cam ^. eyePos) sc . rasterRay cam sz
 
 -- | renders the image in parallel
 renderImageParallel :: ImageSize -> PixelGen -> Image PixelRGB8
@@ -70,11 +71,11 @@ rasterPoint :: Screen -> ImageSize -> ImageCoords -> R3
 rasterPoint sc (iW, iH) (iX, iY) = start + x.*aX - y.*aY
   where x = (0.5 + fromIntegral iX) / fromIntegral iW
         y = (0.5 + fromIntegral iY) / fromIntegral iH
-        aX = axisX sc
-        aY = axisY sc
-        start = center sc - 0.5.*(aX - aY)
+        aX = sc ^. axisX
+        aY = sc ^. axisY
+        start = sc ^. center - 0.5.*(aX - aY)
 
 -- | uses `rasterPoint` to get a start-ray from the camaras eye to a rasterized point on the screen
 rasterRay :: Camera -> ImageSize -> ImageCoords -> Ray
-rasterRay cam sz = rayTo (eyePos cam) . rasterPoint (screen cam) sz
+rasterRay cam sz = rayTo (cam ^. eyePos) . rasterPoint (cam ^. screen) sz
 

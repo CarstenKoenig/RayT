@@ -24,6 +24,7 @@ library
                      RayT.Primitives
   -- other-modules:     
   build-depends:     base >=4.6 && <4.7,
+                     lens > 4.0,
                      transformers,
                      repa,
                      JuicyPixels
@@ -37,6 +38,7 @@ executable RayT-sample
   -- other-extensions:    
   build-depends:     base >=4.6 && <4.7,
                      RayT,
+                     lens > 4.0,
                      transformers,
                      repa,
                      JuicyPixels
@@ -48,6 +50,7 @@ test-suite RayT-tests
   hs-source-dirs:    tests, src
   main-is:           MainTestSuite.hs
   build-depends:     base,
+                     lens > 4.0,
                      transformers,
                      repa,
                      JuicyPixels,

@@ -1,14 +1,16 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module RayT 
     ( ImageCoords
     , ImageSize
-    , Screen (..)
-    , Camera (..)
+    , Screen, center, axisX, axisY
+    , Camera, eyePos, screen
     , Ray
-    , Intersection (..)
-    , Material (..)
+    , Material (..), matColor
+    , Intersection (..), iDistance, iPoint, iNormal, iMaterial
     , Color 
     , Object
-    , Scene (Scene)
+    , Scene (..), objects, lights
     , R3, Vector3 (..)
     , rgb
     , defaultScreen, defaultCamera
@@ -17,15 +19,19 @@ module RayT
     ) where
 
 import GHC.Exts
+
 import Control.Applicative ((<$>))
+import Control.Lens ((^.))
+import Control.Lens.TH
+
 import Data.Maybe (catMaybes, isNothing)
 
 import RayT.Vector
 import RayT.Colors
 import RayT.Lights
 
-type Width  = Double
-type Height = Double
+type Width            = Double
+type Height           = Double
 
 -- | Pixel-coordinate (X, Y)
 type    ImageCoords   = (Int, Int)
@@ -34,35 +40,40 @@ type    ImageCoords   = (Int, Int)
 type    ImageSize     = (Int, Int)
 
 data Screen = Screen
-    { center :: R3
-    , axisX  :: R3
-    , axisY  :: R3
+    { _center :: R3
+    , _axisX  :: R3
+    , _axisY  :: R3
     } deriving Show
+makeLenses ''Screen
 
 data Camera = Camera 
-    { eyePos :: R3
-    , screen :: Screen
+    { _eyePos :: R3
+    , _screen :: Screen
     } deriving Show
+makeLenses ''Camera
 
 newtype Ray = Ray (R3, N3)
     deriving (Eq, Show)
 
-data Intersection = Intersection
-    { iDistance :: Double
-    , iPoint    :: R3
-    , iNormal   :: N3
-    , iMaterial :: Material 
-    } deriving Show
-
 data Material = Mat
-    { matColor :: Color 
+    { _matColor :: Color 
     } deriving Show
+makeLenses ''Material
+
+data Intersection = Intersection
+    { _iDistance :: Double
+    , _iPoint    :: R3
+    , _iNormal   :: N3
+    , _iMaterial :: Material 
+    } deriving Show
+makeLenses ''Intersection
 
 type Object = Ray -> Maybe Intersection
 data Scene  = Scene
-    { objects :: [Object]
-    , lights  :: [Light]
+    { _objects :: [Object]
+    , _lights  :: [Light]
     }
+makeLenses ''Scene
 
 -- | a default screen is located at the origin (0,0,0) with default axis
 defaultScreen :: (Width, Height) -> Screen
@@ -98,26 +109,26 @@ traceRay eP scene = maybe black (calcShading eP scene) . findIntersection scene
 -- | basic shading algorithm for an intersections
 calcShading :: R3 -> Scene -> Intersection -> Color
 calcShading eP s i = lightF * mc
-	where mc     = matColor . iMaterial $ i
-	      lightF = sum . map (calcLight eP s i) $ lights s
+	where mc     = i ^. iMaterial . matColor
+	      lightF = sum . map (calcLight eP s i) $ s ^. lights
 
 calcLight :: R3 -> Scene -> Intersection -> Light -> Color
 calcLight _ _ _ (AmbientLight a)               = a
 calcLight _ _ i (DirectionalLight (Norm3 d) l) = scale (negate (d.*.n)) l
-	where Norm3 n = iNormal i
-calcLight _ s i (PositionalLight lp lc)        = if inSight s lp (iPoint i)
+	where Norm3 n = i ^. iNormal
+calcLight _ s i (PositionalLight lp lc)        = if inSight s lp (i ^. iPoint)
                                                  then lc else black
 
 inSight :: Scene -> R3 -> R3 -> Bool
 inSight scene from to = isNothing hit || hit == Just to
-    where hit = iPoint <$> (findIntersection scene $ rayTo from to)
+    where hit = (^. iPoint) <$> (findIntersection scene $ rayTo from to)
 
 findIntersection :: Scene -> Ray -> Maybe Intersection
 findIntersection s r =
     case intersections of
         []   -> Nothing
         ints -> Just . nearest $ ints
-    where intersections    = thoseIntersected . objects $ s
+    where intersections    = thoseIntersected (s ^. objects)
           thoseIntersected = catMaybes . map ((flip ($)) r)
-          nearest          = head . sortWith iDistance
+          nearest          = head . sortWith (^. iDistance)
 
