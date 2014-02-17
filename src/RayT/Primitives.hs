@@ -2,11 +2,11 @@
 module RayT.Primitives
     ( Radius
     , sphere
+    , module RayT.Scene
     ) where
 
-import RayT
-import RayT.Vector
 import RayT.Utils
+import RayT.Scene
 
 type Radius = Double
 

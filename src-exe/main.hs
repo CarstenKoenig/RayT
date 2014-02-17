@@ -1,11 +1,6 @@
 module Main where
 
 import RayT
-import RayT.Colors
-import RayT.Lights
-import RayT.Primitives
-import RayT.Vector
-import RayT.Image (traceToPng)
 
 main :: IO()
 main = do

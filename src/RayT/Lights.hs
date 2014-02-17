@@ -1,6 +1,8 @@
 -- | provides a datatype `UnitDouble` that are doubles bound between 0 and 1
 module RayT.Lights
     ( Light (..)
+	, module RayT.Colors
+	, module RayT.Vector
     ) where
 
 import RayT.Colors

@@ -12,11 +12,8 @@ import Test.Framework.Providers.QuickCheck2
 import Test.Framework.Providers.HUnit
 
 import RayT
+import RayT.Tracing (traceRay)
 import RayT.Primitives
-import RayT.Vector
-import RayT.Utils
-import RayT.Colors
-import RayT.Lights
 
 primitivesTests :: Test
 primitivesTests =

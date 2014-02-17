@@ -10,7 +10,6 @@ import Test.Framework.Providers.QuickCheck2
 import Test.Framework.Providers.HUnit
 
 import RayT.Utils
-import RayT.Vector
 
 utilTests :: Test
 utilTests =

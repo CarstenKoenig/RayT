@@ -11,10 +11,6 @@ import Test.Framework
 import Test.Framework.Providers.QuickCheck2
 import Test.Framework.Providers.HUnit
 
-import RayT
-import RayT.Primitives
-import RayT.Vector
-import RayT.Utils
 import RayT.Colors
 
 colorTests :: Test

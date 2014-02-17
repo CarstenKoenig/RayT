@@ -2,20 +2,43 @@
 -- given a 'PixelGen' (a function returning color information for each pixel-coordinate)
 -- use 'renderToPng' to generate a generic PNG image
 module RayT.Image 
-    ( ImageCoords, ImageSize, ColorRGB, PixelGen,
-      renderToPng, traceToPng, rasterPoint, rasterRay
+    ( Width, Height
+    , ImageCoords, ImageSize
+    , Screen (..), Camera (..)
+    , ColorRGB, PixelGen
+    , renderToPng, traceToPng, rasterPoint, rasterRay
+    , module RayT.Tracing
     ) where
 
-import RayT
-import RayT.Vector
-import RayT.Colors
+import RayT.Tracing
 
 import Codec.Picture (PixelRGB8(..), Image, generateImage, writePng)
 import Data.Array.Repa as Repa hiding ((++))
 import Data.Functor.Identity
 
-
 -- * Type synonyms
+
+type Width  = Double
+type Height = Double
+
+-- | Pixel-coordinate (X, Y)
+type    ImageCoords   = (Int, Int)
+
+-- | Image size in Pixels (width, height)
+type    ImageSize     = (Int, Int)
+
+-- * Types
+
+data Screen = Screen
+    { center :: R3
+    , axisX  :: R3
+    , axisY  :: R3
+    } deriving Show
+
+data Camera = Camera 
+    { eyePos :: R3
+    , screen :: Screen
+    } deriving Show
 
 -- | use to generate the image
 type PixelGen = ImageCoords -> Color
