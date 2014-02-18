@@ -50,8 +50,8 @@ bound a
 
 toColorRGB :: Color -> ColorRGB
 toColorRGB (RGB (r,g,b)) = 
-    (scale r, scale g, scale b)
-      where scale v =  floor $ 255 * bound v
+    (scaleUp r, scaleUp g, scaleUp b)
+      where scaleUp v =  floor $ 255 * bound v
 
 instance Eq Color where
     RGB (r,g,b) == RGB (r',g',b') = r ~= r' && g ~= g' && b ~= b'
