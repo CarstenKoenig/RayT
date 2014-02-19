@@ -1,7 +1,5 @@
 module RayT.Material
     ( Material (..)
-    , Color 
-    , rgb
     , module RayT.Colors
     ) where
 
