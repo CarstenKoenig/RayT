@@ -10,6 +10,7 @@ import Test.Framework.Providers.QuickCheck2
 import Test.Framework.Providers.HUnit
 
 import RayT
+import RayT.Rays
 import RayT.Image
 
 imageTests :: Test

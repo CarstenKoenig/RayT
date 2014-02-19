@@ -7,9 +7,12 @@ module RayT.Image
     , Screen (..), Camera (..)
     , ColorRGB, PixelGen
     , renderToPng, traceToPng, rasterPoint, rasterRay
-    , module RayT.Tracing
     ) where
 
+import RayT.Vector
+import RayT.Colors
+import RayT.Rays
+import RayT.Scene
 import RayT.Tracing
 
 import Codec.Picture (PixelRGB8(..), Image, generateImage, writePng)

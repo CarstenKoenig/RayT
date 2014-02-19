@@ -8,8 +8,8 @@ main = do
 	traceToPng sz cam testScene "test.png"
 	putStrLn "...done!"
 	where sz  = (600, 600)
-	      cam = Camera ((-10).*bZ + 6.*bY) screen
-	      screen = Screen (3.*bY) (2.*bX) (2.*bY)
+	      cam = Camera ((-10).*bZ + 6.*bY) sc
+	      sc  = Screen (3.*bY) (2.*bX) (2.*bY)
 
 testScene :: Scene
 testScene = Scene

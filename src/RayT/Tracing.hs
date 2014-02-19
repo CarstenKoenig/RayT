@@ -1,8 +1,8 @@
 module RayT.Tracing
     ( traceRay
-    , module RayT.Scene
     ) where
 
+import Control.Lens
 import RayT.Scene
 
 -- | traces a single ray through a scene
@@ -14,7 +14,7 @@ traceRay eP scene = maybe black (calcShading eP scene) . findIntersection scene
 calcShading :: R3 -> Scene -> Intersection -> Color
 calcShading eP s i = lightF * mc
     where mc     = matColor . iMaterial $ i
-          lightF = sum . map (calcLight eP s i) $ lights s
+          lightF = sum . map (calcLight eP s i) $ s ^. lights
 
 calcLight :: R3 -> Scene -> Intersection -> Light -> Color
 calcLight _ _ _ (AmbientLight a)               = a

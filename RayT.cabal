@@ -19,11 +19,17 @@ library
   hs-source-dirs:    src
   exposed-modules:   RayT,
                      RayT.Colors,
+                     RayT.Lights,
+                     RayT.Material,
                      RayT.Vector,
                      RayT.Image,
-                     RayT.Primitives
-  -- other-modules:     
+                     RayT.Primitives,
+                     RayT.Rays,
+                     RayT.Scene,
+                     RayT.Tracing
+  other-modules:     RayT.Utils
   build-depends:     base >=4.6 && <4.7,
+                     lens,
                      transformers,
                      repa,
                      JuicyPixels
@@ -37,11 +43,13 @@ executable RayT-sample
   -- other-extensions:    
   build-depends:     base >=4.6 && <4.7,
                      RayT,
+                     lens,
                      transformers,
                      repa,
                      JuicyPixels
   hs-source-dirs:    src
   default-language:  Haskell2010
+  ghc-options:       -Wall
 
 test-suite RayT-tests
   type:              exitcode-stdio-1.0
@@ -49,6 +57,7 @@ test-suite RayT-tests
   main-is:           MainTestSuite.hs
   build-depends:     base,
                      transformers,
+                     lens,
                      repa,
                      JuicyPixels,
                      HUnit,
@@ -57,3 +66,4 @@ test-suite RayT-tests
                      test-framework-hunit,
                      test-framework-quickcheck2    
   default-language:  Haskell2010                     
+  ghc-options:       -Wall
